@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+# local virtualenvs (any of these names)
+.venv/
+venv/
+env/
+nexus-os/
+Scawward-os/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Env / secrets
+.env
+.env.local
+*.key
+*.pem
+
+# Data
+data/*.db
+data/chroma/
+data/screenshots/
+data/embeddings/
+data/sandbox/
+logs/
+*.log
+
+# Node + TypeScript build artifacts
+node_modules/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+# Stray .js compiled output next to .tsx sources
+frontend/src/**/*.js
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+!.vscode/settings.json

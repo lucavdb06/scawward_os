@@ -1,0 +1,23 @@
+# Optional: only needed if you swap SQLite for Postgres + Redis later.
+# For solo MVP, ignore this file — SQLite + ChromaDB are enough.
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: scawward
+      POSTGRES_PASSWORD: scawward_dev
+      POSTGRES_DB: scawward
+    ports:
+      - "5432:5432"
+    volumes:
+      - scawward_pg:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  scawward_pg:
