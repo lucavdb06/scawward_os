@@ -70,6 +70,20 @@ class HealthResponse(BaseModel):
     version: str
     tools: list[str] = []
     has_api_key: bool = False
+    llm_provider: str = "anthropic"
+    llm_model: str = ""
+    llm_ready: bool = False
+    ollama_reachable: bool = False
+    ollama_models: list[str] = []
+
+
+class LLMPreference(BaseModel):
+    provider: Literal["anthropic", "ollama"]
+    ollama_model: str | None = None
+
+
+class ChatHistoryResponse(BaseModel):
+    events: list[dict[str, Any]]
 
 
 # ─── WebSocket events ────────────────────────────────────────────────

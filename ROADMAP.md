@@ -56,10 +56,10 @@ Scawward: <calls screenshot, recalls last few interactions, answers>
 - [x] WebSocket auto-reconnect with exponential backoff
 - [x] Markdown rendering in chat + tool result cards
 - [x] **Pluggable LLM providers** (`anthropic` + `ollama`) — local GPU mode for free, offline, unlimited iteration
-- [ ] UI toggle for provider/model switch (currently env-var only)
+- [x] UI toggle for provider/model switch (top bar: Claude API ↔ Ollama + local model picker)
 - [ ] Save/load workflows from UI
 - [ ] Confirmation prompts in UI for `requires_confirmation` decisions
-- [ ] Conversation persistence across reloads
+- [x] Conversation persistence across reloads (UI chat saved to SQLite + `/api/chat/history`)
 
 **Milestone:**
 ```

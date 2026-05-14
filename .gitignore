@@ -27,6 +27,7 @@ data/chroma/
 data/screenshots/
 data/embeddings/
 data/sandbox/
+data/runtime_llm.json
 logs/
 *.log
 

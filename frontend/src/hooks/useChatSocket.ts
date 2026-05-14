@@ -20,6 +20,25 @@ export function useChatSocket() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/chat/history");
+        if (!r.ok || cancelled) return;
+        const data = (await r.json()) as { events?: ChatEvent[] };
+        if (!cancelled && data.events && data.events.length > 0) {
+          setEvents(data.events);
+        }
+      } catch {
+        /* ignore */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     stoppedRef.current = false;
 
     function connect() {
@@ -47,7 +66,6 @@ export function useChatSocket() {
       };
 
       ws.onerror = () => {
-        // onclose will fire right after — let it handle the retry.
         try { ws.close(); } catch { /* ignore */ }
       };
 

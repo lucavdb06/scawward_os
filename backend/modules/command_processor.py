@@ -11,6 +11,7 @@ from typing import Any, AsyncIterator
 
 from ..core.event_bus import EventBus, get_bus
 from ..core.scawward_agent import ScawwardAgent
+from .chat_persistence import persist_stream_turn
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,14 @@ class CommandProcessor:
 
     async def stream(self, text: str) -> AsyncIterator[dict[str, Any]]:
         await self.bus.emit("command.received", {"text": text}, source="command_processor")
-        async for ev in self.agent.stream(text):
-            yield ev
-        await self.bus.emit("command.completed", {"text": text}, source="command_processor")
+        buf: list[dict[str, Any]] = []
+        try:
+            async for ev in self.agent.stream(text):
+                buf.append(ev)
+                yield ev
+        finally:
+            try:
+                await persist_stream_turn(text, buf)
+            except Exception:
+                logger.exception("chat persistence failed")
+            await self.bus.emit("command.completed", {"text": text}, source="command_processor")

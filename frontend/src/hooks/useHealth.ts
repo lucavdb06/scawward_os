@@ -5,10 +5,16 @@ export interface Health {
   version: string;
   tools: string[];
   has_api_key: boolean;
+  llm_provider: string;
+  llm_model: string;
+  llm_ready: boolean;
+  ollama_reachable: boolean;
+  ollama_models: string[];
 }
 
-export function useHealth(): Health | null {
-  const [h, setH] = useState<Health | null>(null);
+export function useHealth(): { health: Health | null; refresh: () => void } {
+  const [health, setHealth] = useState<Health | null>(null);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -21,16 +27,14 @@ export function useHealth(): Health | null {
           if (r.ok) {
             const j = (await r.json()) as Health;
             if (!cancelled) {
-              setH(j);
+              setHealth(j);
               attempt = 0;
-              // Once we have a value, recheck every 15s in the background
-              // so the topbar stays accurate (api key revoked, tool added).
-              await new Promise((res) => setTimeout(res, 15000));
+              await new Promise((res) => setTimeout(res, 15_000));
               continue;
             }
           }
         } catch {
-          /* swallow — fall through to backoff */
+          /* swallow */
         }
         attempt += 1;
         const delay = Math.min(400 * 2 ** Math.min(attempt, 5), 8000);
@@ -42,7 +46,10 @@ export function useHealth(): Health | null {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [tick]);
 
-  return h;
+  return {
+    health,
+    refresh: () => setTick((t) => t + 1),
+  };
 }

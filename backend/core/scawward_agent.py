@@ -86,6 +86,8 @@ class ScawwardAgent:
         self.context = context
         self.policy = policy
         self.bus = bus or get_bus()
+        # Overridden by `AppStack` when the user switches LLM from the UI.
+        self.runtime_model: str | None = None
 
     # ─── Public API ───────────────────────────────────────────────
     async def chat(self, user_input: str) -> AgentTurn:
@@ -139,7 +141,7 @@ class ScawwardAgent:
 
         for iteration in range(1, MAX_TOOL_ITERATIONS + 1):
             response: ProviderResponse = await self.provider.create(
-                model=self.cfg.active_model,
+                model=(self.runtime_model or self.cfg.active_model),
                 max_tokens=self.cfg.max_tokens,
                 temperature=self.cfg.temperature,
                 system=sys_blocks,

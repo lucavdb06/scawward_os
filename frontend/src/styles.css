@@ -60,9 +60,29 @@ html, body, #root {
 }
 .topbar .dim { color: var(--fg-faint); }
 .ok-dot   { color: var(--good); }
+.warn-dot { color: var(--warn); }
 .bad-dot  { color: var(--bad); }
 
-/* ── Panels ────────────────────────────────────── */
+.topbar .llm-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: min(560px, 48vw);
+}
+.llm-select {
+  background: #0a1124;
+  color: var(--fg-0);
+  border: 1px solid #1f2c50;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  max-width: 200px;
+  cursor: pointer;
+}
+.llm-select.narrow { max-width: 170px; }
+.llm-select:disabled { opacity: 0.5; cursor: not-allowed; }
 .chat, .sidebar {
   background: var(--bg-1);
   border: 1px solid #1c2540;
